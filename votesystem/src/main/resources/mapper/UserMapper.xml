@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mapper.UserMapper">
+
+	<resultMap type="com.test.bean.User" id="user">
+        <result property="id" column="id" />
+        <result property="userName" column="user_name" />
+        <result property="userPassword" column="user_password" />
+        <result property="userPhone" column="user_phone" />
+        <result property="memo" column="memo" />
+    </resultMap>
+
+
+	<insert id="save" parameterType="com.test.bean.User">
+		insert into t_user
+		(id,user_name,user_password,user_phone,memo)
+		values
+		(
+		#{id},#{userName},#{userPassword},#{userPhone},#{memo}
+		)
+	</insert>
+	
+	<delete id="delete" parameterType="String">
+		delete from t_user
+		where id=#{id}
+	</delete>
+
+	<update id="update" parameterType="com.test.bean.User">
+		update t_user set
+		user_name=#{userName},user_password=#{userPassword},user_phone=#{userPhone},memo=#{memo} where id=#{id}
+	</update>
+
+	<select id="list" parameterType="com.test.bean.User"  resultMap="user">
+		 SELECT
+           *
+         from t_user
+        <where>
+           <if test="null != userName and userName != ''">
+                and user_name = #{userName}
+           </if>
+           <if test="null != userPassword and userPassword != ''">
+                and user_password = #{userPassword}
+           </if>
+           <if test="null != userPhone and userPhone != ''">
+                and user_phone = #{userPhone}
+           </if>
+           <if test="null != memo and memo != ''">
+                and memo = #{memo}
+           </if>
+        </where>
+	</select>
+	
+	<select id="query" resultMap="user">
+		 SELECT
+           *
+         from t_user
+		 where id=#{id}
+	</select>
+	
+</mapper>

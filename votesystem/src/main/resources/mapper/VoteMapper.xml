@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mapper.VoteMapper">
+
+	<resultMap type="com.test.bean.Vote" id="vote">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="sex" column="sex" />
+        <result property="voteNumber" column="vote_number" />
+        <result property="createTime" column="create_time" />
+        <result property="introduce" column="introduce" />
+        <result property="orgName" column="org_name" />
+    </resultMap>
+
+
+	<insert id="save" parameterType="com.test.bean.Vote">
+		insert into t_vote
+		(id,name,sex,vote_number,create_time,introduce,org_name)
+		values
+		(
+		#{id},#{name},#{sex},${voteNumber},#{createTime},#{introduce},#{orgName}
+		)
+	</insert>
+	
+	<delete id="delete" parameterType="String">
+		delete from t_vote
+		where id=#{id}
+	</delete>
+
+	<update id="update" parameterType="com.test.bean.Vote">
+		update t_vote set
+		name=#{name},sex=#{sex},vote_number=${voteNumber},create_time=#{createTime},introduce=#{introduce},org_name=#{orgName} where id=#{id}
+	</update>
+
+	<select id="list" parameterType="com.test.bean.Vote"  resultMap="vote">
+		 SELECT
+           *
+         from t_vote
+        <where>
+           <if test="null != name and name != ''">
+                and name like '%${name}%'
+           </if>
+           <if test="null != orgName and orgName != ''">
+                and org_name like '%${orgName}%'
+           </if>
+        </where>
+        order by vote_number desc
+	</select>
+	
+	<select id="query" resultMap="vote">
+		 SELECT
+           *
+         from t_vote
+		 where id=#{id}
+	</select>
+	
+</mapper>

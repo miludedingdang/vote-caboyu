@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mapper.OrgMapper">
+
+	<resultMap type="com.test.bean.Org" id="org">
+        <result property="id" column="id" />
+        <result property="orgName" column="org_name" />
+    </resultMap>
+
+
+	<insert id="save" parameterType="com.test.bean.Org">
+		insert into t_org
+		(id,org_name)
+		values
+		(
+		#{id},#{orgName}
+		)
+	</insert>
+	
+	<delete id="delete" parameterType="String">
+		delete from t_org
+		where id=#{id}
+	</delete>
+
+	<update id="update" parameterType="com.test.bean.Org">
+		update t_org set
+		org_name=#{orgName} where id=#{id}
+	</update>
+
+	<select id="list" parameterType="com.test.bean.Org"  resultMap="org">
+		 SELECT
+           *
+         from t_org
+        <where>
+           <if test="null != orgName and orgName != ''">
+                and org_name = #{orgName}
+           </if>
+        </where>
+	</select>
+	
+	<select id="query" resultMap="org">
+		 SELECT
+           *
+         from t_org
+		 where id=#{id}
+	</select>
+	
+</mapper>
